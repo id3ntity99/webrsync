@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestChecksumScanner" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-01-08T06:04:06" hostname="yosef-800G5H-800G5S" time="0.024">
+  <properties/>
+  <testcase name="testScanningDifferentFile()" classname="TestChecksumScanner" time="0.024"/>
+  <system-out><![CDATA[15:04:06.362 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Index Map = {48752=5, -17411=1, -17401=2, -18107=0, 48315=4, 46924=3}
+15:04:06.368 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [0, 512)
+15:04:06.368 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [0, 512)
+15:04:06.369 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match found
+15:04:06.369 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [512, 1024)
+15:04:06.370 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [512, 1024)
+15:04:06.370 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match found
+15:04:06.370 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [1024, 1536)
+15:04:06.371 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [1024, 1536)
+15:04:06.371 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match found
+15:04:06.371 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [1536, 2048)
+15:04:06.371 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [1536, 2048)
+15:04:06.372 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match found
+15:04:06.372 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [2048, 2560)
+15:04:06.372 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [2048, 2560)
+15:04:06.372 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match found
+15:04:06.373 [Test worker] DEBUG com.github.rsync4j.data.RollingWindowBuffer - Getting bytes from sub-range [2560, 3051)
+15:04:06.373 [Test worker] DEBUG com.github.rsync4j.ChecksumScanner - Match is not found
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
