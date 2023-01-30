@@ -1,6 +1,7 @@
 package com.github.webrsync.data;
 
 import io.netty.buffer.AbstractByteBuf;
+import io.netty.buffer.ByteBufUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,14 +38,18 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected int _getUnsignedMedium(int index) {
-        byte[] medBytes = new byte[3];
-        nioBuffer.get(medBytes, 0, 3);
-        return 0;
+        int leftMost = (nioBuffer.get(index) & 0xff) << 16; // Note that, the bitwise "&" will auto-promotes the result to int type
+        int mid = (nioBuffer.get(index + 1) & 0xff) << 8;
+        int rightMost = (nioBuffer.get(index + 2) & 0xff);
+        return leftMost | mid | rightMost;
     }
 
     @Override
     protected int _getUnsignedMediumLE(int index) {
-        return 0;
+        int leftMost = (nioBuffer.get(index + 2) & 0xff) << 16;
+        int mid = (nioBuffer.get(index + 1) & 0xff) << 8;
+        int rightMost = (nioBuffer.get(index) & 0xff);
+        return leftMost | mid | rightMost;
     }
 
     @Override
@@ -79,7 +84,8 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected void _setShortLE(int index, int value) {
-
+            short shortLE = ByteBufUtil.swapShort((short) value);
+            nioBuffer.putShort(index, shortLE);
     }
 
     @Override
@@ -99,7 +105,7 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected void _setLong(int index, long value) {
-
+        nioBuffer.putLong(index, value);
     }
 
     @Override
@@ -109,6 +115,6 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected void _setInt(int index, int value) {
-
+        nioBuffer.putInt(index, value);
     }
 }
