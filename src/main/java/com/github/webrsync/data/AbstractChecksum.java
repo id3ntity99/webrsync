@@ -84,23 +84,33 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected void _setShortLE(int index, int value) {
-            short shortLE = ByteBufUtil.swapShort((short) value);
-            nioBuffer.putShort(index, shortLE);
+        short shortLE = ByteBufUtil.swapShort((short) value);
+        nioBuffer.putShort(index, shortLE);
     }
 
     @Override
     protected void _setMedium(int index, int value) {
-
+        byte leftMostByte = (byte) (value >>> 16);
+        byte midByte = (byte) (value >>> 8);
+        byte rightMostByte = (byte) (value);
+        nioBuffer.put(index, leftMostByte);
+        nioBuffer.put(index + 1, midByte);
+        nioBuffer.put(index + 2, rightMostByte);
     }
 
     @Override
     protected void _setMediumLE(int index, int value) {
-
+        byte leftMostByte = (byte) (value >>> 16);
+        byte midByte = (byte) (value >>> 8);
+        byte rightMostByte = (byte) (value);
+        nioBuffer.put(index, rightMostByte);
+        nioBuffer.put(index + 1, midByte);
+        nioBuffer.put(index + 2, leftMostByte);
     }
 
     @Override
     protected void _setIntLE(int index, int value) {
-
+        nioBuffer.putInt(index, ByteBufUtil.swapInt(value));
     }
 
     @Override
@@ -110,7 +120,7 @@ public abstract class AbstractChecksum extends AbstractByteBuf implements Checks
 
     @Override
     protected void _setLongLE(int index, long value) {
-
+        nioBuffer.putLong(index, ByteBufUtil.swapLong(value));
     }
 
     @Override
