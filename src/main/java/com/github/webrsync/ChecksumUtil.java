@@ -8,13 +8,12 @@ import io.netty.buffer.Unpooled;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
-public class AbstractChecksumCalculator {
+public class ChecksumUtil {
     private static final int MOD = 65536;
     private static final String ALGORITHM = "md5";
 
-    public final WeakChecksum computeWeak(byte[] buffer) {
+    public static WeakChecksum computeWeak(byte[] buffer) {
         int a = 0;
         int b = 0;
         for (byte word : buffer) {
@@ -22,11 +21,10 @@ public class AbstractChecksumCalculator {
             b = (b + a) % MOD;
         }
         int checksum = (b << 16) | a;
-        int hash16 = checksum % MOD;
-        return new WeakChecksum(checksum, hash16);
+        return new WeakChecksum(checksum);
     }
 
-    public final StrongChecksum computeStrong(byte[] buffer) {
+    public static StrongChecksum computeStrong(byte[] buffer) {
         try {
             MessageDigest md = MessageDigest.getInstance(ALGORITHM);
             byte[] strongHash = md.digest(buffer);
@@ -37,19 +35,18 @@ public class AbstractChecksumCalculator {
         }
     }
 
-    public ByteBuf computeHash16(AbstractChecksum checksum) {
-        int hash16 = checksum.value().intValue() % MOD;
-        return Unpooled.buffer().setInt(0, hash16);
+    public static int computeHash16(AbstractChecksum checksum) {
+        return checksum.value().intValue() % MOD;
     }
 
     public ByteBuf concat(AbstractChecksum... checksum) {
-        ByteBuf hash16 = null;
+        ByteBuf hash16 = Unpooled.buffer();
         WeakChecksum weakChecksum = null;
         StrongChecksum strongChecksum = null;
         for (AbstractChecksum abstractChecksum : checksum) {
             if (abstractChecksum instanceof WeakChecksum) {
                 weakChecksum = (WeakChecksum) abstractChecksum;
-                hash16 = computeHash16(weakChecksum);
+                hash16.setShort(0, computeHash16(weakChecksum));
             } else if (abstractChecksum instanceof StrongChecksum) {
                 strongChecksum = (StrongChecksum) abstractChecksum;
             }
