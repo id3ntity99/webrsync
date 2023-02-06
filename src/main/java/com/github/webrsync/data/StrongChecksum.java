@@ -2,30 +2,24 @@ package com.github.webrsync.data;
 
 import java.math.BigInteger;
 
-public class StrongChecksum implements Checksum {
-    private final byte[] byteValue;
-    private final BigInteger bigIntValue;
-
+public class StrongChecksum extends AbstractChecksum {
     public StrongChecksum(byte[] byteValue) {
-        this.byteValue = byteValue;
-        this.bigIntValue = new BigInteger(byteValue);
+        super(byteValue);
     }
 
     @Override
-    public BigInteger getValue() {
-        return bigIntValue;
-    }
-
-    public byte[] getBytes() {
-        return byteValue;
+    public BigInteger value() {
+        byte[] tmpArr = new byte[16];
+        buffer.getBytes(0, tmpArr, 0, 16);
+        return new BigInteger(tmpArr);
     }
 
     @Override
-    public boolean equals(Checksum cks) {
+    public boolean isEqualTo(AbstractChecksum cks) {
         if (cks instanceof StrongChecksum) {
             StrongChecksum strongCks = (StrongChecksum) cks;
-            return this.bigIntValue.equals(strongCks.getValue());
+            return value().equals(strongCks.value());
         }
-        return super.equals(cks);
+        return false;
     }
 }

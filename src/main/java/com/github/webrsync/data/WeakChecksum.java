@@ -1,33 +1,20 @@
 package com.github.webrsync.data;
 
-public class WeakChecksum implements Checksum {
-    private final int value;
-    private final int hash16;
-
+public class WeakChecksum extends AbstractChecksum {
     public WeakChecksum(int value) {
-        this.value = value;
-        this.hash16 = 0;
-    }
-
-    public WeakChecksum(int value, int hash16) {
-        this.value = value;
-        this.hash16 = hash16;
+        super(value);
     }
 
     @Override
-    public Integer getValue() {
-        return value;
-    }
-
-    public int getHash16() {
-        return hash16;
+    public Integer value() {
+        return buffer.getInt(0);
     }
 
     @Override
-    public boolean equals(Checksum checksum) {
+    public boolean isEqualTo(AbstractChecksum checksum) {
         if (checksum instanceof WeakChecksum) {
             WeakChecksum weakCh = (WeakChecksum) checksum;
-            return this.value == weakCh.getValue();
+            return value().equals(weakCh.value());
         }
         return false;
     }
