@@ -10,23 +10,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class ChecksumParser extends SimpleChannelInboundHandler<File> {
     private ChannelHandlerContext handlerCtx;
 
     private void parse(File file) throws IOException {
-        Queue<ChecksumHolder> holderQue = new LinkedList<>();
         try (InputStream stream = new FileInputStream(file)) {
             while (stream.available() != 0) {
                 byte[] buffer = stream.readNBytes(512);
                 WeakChecksum weakChecksum = ChecksumUtil.computeWeak(buffer);
                 StrongChecksum strongChecksum = ChecksumUtil.computeStrong(buffer);
                 ChecksumHolder holder = new ChecksumHolder(weakChecksum, strongChecksum);
-                holderQue.add(holder);
+                handlerCtx.write(holder);
             }
-            handlerCtx.write(holderQue);
         }
     }
 
