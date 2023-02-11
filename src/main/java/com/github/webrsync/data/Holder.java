@@ -2,8 +2,8 @@ package com.github.webrsync.data;
 
 import io.netty.buffer.ByteBuf;
 
-public interface Holder {
+public interface Holder<T> {
     ByteBuf content();
 
-    boolean isEqualTo();
+    boolean isEqualTo(T target);
 }
