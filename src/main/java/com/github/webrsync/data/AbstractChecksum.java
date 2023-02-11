@@ -3,7 +3,7 @@ package com.github.webrsync.data;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public abstract class AbstractChecksum {
+public abstract class AbstractChecksum implements Holder<AbstractChecksum>{
     protected final ByteBuf buffer;
 
     protected AbstractChecksum(int weakChecksum) {
@@ -16,7 +16,7 @@ public abstract class AbstractChecksum {
         buffer.setBytes(0, strongChecksum);
     }
 
-    public ByteBuf buffer() {
+    public ByteBuf content() {
         return buffer;
     }
 
