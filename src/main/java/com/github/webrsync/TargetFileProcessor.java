@@ -2,7 +2,7 @@ package com.github.webrsync;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.*;
 
 import java.io.File;
 import java.util.Properties;
@@ -16,10 +16,29 @@ public class TargetFileProcessor extends SimpleChannelInboundHandler<FullHttpReq
     }
 
     @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
+    }
+
+    @Override
     public void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) {
-        String reqUri = req.uri().replaceFirst("/", ""); // Remove first separator
-        String targetUri = prop.getProperty("basePath") + reqUri;
-        File targetFile = new File(targetUri);
-        ctx.fireChannelRead(targetFile);
+        File targetFile = handleHttpRequest(req);
+        if (targetFile.exists()) {
+            ctx.fireChannelRead(targetFile);
+            sendHttpResponse(ctx, HttpResponseStatus.OK);
+        } else {
+            sendHttpResponse(ctx, HttpResponseStatus.BAD_REQUEST);
+        }
+    }
+
+    private File handleHttpRequest(FullHttpRequest req) {
+        // URI format: /BASE_PATH/USER_NAME/path/to/specific/file
+        String uri = prop.getProperty("basePath") + req.uri().replaceFirst("/", "");
+        return new File(uri);
+    }
+
+    private void sendHttpResponse(ChannelHandlerContext ctx, HttpResponseStatus status) {
+        FullHttpResponse res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, status);
+        ctx.write(res);
     }
 }
