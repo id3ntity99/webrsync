@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestTargetFileProcessor {
     private static EmbeddedChannel channel;
 
-    //TODO:
-    //  From now on, since the all server-side components of the rsync are ready, the test code must be written.
     public void initChannelWithCustomProps() throws IOException {
         String basePath = System.getProperty("user.dir");
         Properties prop = new Properties();
