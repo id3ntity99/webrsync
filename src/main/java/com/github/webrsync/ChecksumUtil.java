@@ -3,6 +3,7 @@ package com.github.webrsync;
 import com.github.webrsync.data.AbstractChecksum;
 import com.github.webrsync.data.StrongChecksum;
 import com.github.webrsync.data.WeakChecksum;
+import io.netty.buffer.ByteBuf;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +26,11 @@ public class ChecksumUtil {
         return new WeakChecksum(checksum);
     }
 
+    public static WeakChecksum computeWeak(ByteBuf buffer) {
+        byte[] arr = buffer.nioBuffer().array();
+        return computeWeak(arr);
+    }
+
     public static StrongChecksum computeStrong(byte[] buffer) {
         try {
             MessageDigest md = MessageDigest.getInstance(ALGORITHM);
@@ -34,6 +40,11 @@ public class ChecksumUtil {
             String msg = String.format("Must use MD5 hash algorithm for strong checksum but %s is used.", ALGORITHM);
             throw new WrongAlgorithmException(msg, e);
         }
+    }
+
+    public static StrongChecksum computeStrong(ByteBuf buffer) {
+        byte[] arr = buffer.nioBuffer().array();
+        return computeStrong(arr);
     }
 
     public static int computeHash16(AbstractChecksum checksum) {
