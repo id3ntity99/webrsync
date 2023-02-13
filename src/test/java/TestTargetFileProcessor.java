@@ -2,14 +2,13 @@ import com.github.webrsync.TargetFileProcessor;
 import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestTargetFileProcessor {
     private static EmbeddedChannel channel;
@@ -59,7 +58,7 @@ class TestTargetFileProcessor {
     }
 
     @Test
-    void testSendingReqUsingWrongMethod() throws IOException{
+    void testSendingReqUsingWrongMethod() throws IOException {
         initChannelWithAppProps();
         FullHttpRequest req = new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.POST, "/bin/pydoc3.10");
         channel.writeInbound(req);
