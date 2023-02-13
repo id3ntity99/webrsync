@@ -16,12 +16,15 @@ public class TargetFileProcessor extends SimpleChannelInboundHandler<FullHttpReq
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.flush();
     }
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) {
+        if (req.method() != HttpMethod.GET) {
+            sendHttpResponse(ctx, HttpResponseStatus.BAD_REQUEST);
+        }
         File targetFile = handleHttpRequest(req);
         if (targetFile.exists()) {
             ctx.fireChannelRead(targetFile);
