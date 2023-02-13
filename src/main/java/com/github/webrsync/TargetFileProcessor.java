@@ -36,7 +36,7 @@ public class TargetFileProcessor extends SimpleChannelInboundHandler<FullHttpReq
 
     private File handleHttpRequest(FullHttpRequest req) {
         // URI format: /BASE_PATH/USER_NAME/path/to/specific/file
-        String uri = prop.getProperty("basePath") + req.uri().replaceFirst("/", "");
+        String uri = prop.getProperty("basePath");
         return new File(uri);
     }
 
