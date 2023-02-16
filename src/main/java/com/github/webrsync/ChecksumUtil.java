@@ -27,10 +27,12 @@ public class ChecksumUtil {
     }
 
     public static WeakChecksum computeWeak(ByteBuf buffer) {
-        byte[] arr = buffer.nioBuffer().array();
+        int readable = buffer.readableBytes();
+        byte[] arr = new byte[readable];
+        buffer.readBytes(arr);
+        buffer.release();
         return computeWeak(arr);
     }
-
     public static StrongChecksum computeStrong(byte[] buffer) {
         try {
             MessageDigest md = MessageDigest.getInstance(ALGORITHM);
@@ -43,7 +45,10 @@ public class ChecksumUtil {
     }
 
     public static StrongChecksum computeStrong(ByteBuf buffer) {
-        byte[] arr = buffer.nioBuffer().array();
+        int readable = buffer.readableBytes();
+        byte[] arr = new byte[readable] ;
+        buffer.readBytes(arr);
+        buffer.release();
         return computeStrong(arr);
     }
 
