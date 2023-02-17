@@ -8,7 +8,7 @@ import io.netty.buffer.Unpooled;
  * Instantiation of the subclasses will write data into the buffer, causing the writer index to be incremented, but will not cause
  * the reader index to be incremented since the read() operation of the ByteBuf will not be used here.
  */
-public abstract class AbstractChecksum implements Holder<AbstractChecksum> {
+public abstract class AbstractChecksum implements Holder {
     protected final ByteBuf buffer;
 
     protected AbstractChecksum(int weakChecksum) {
@@ -27,9 +27,10 @@ public abstract class AbstractChecksum implements Holder<AbstractChecksum> {
 
     public abstract Number value();
 
-    public boolean isEqualTo(AbstractChecksum checksum) {
+    public boolean isEqualTo(Holder checksum) {
         if (checksum.getClass() == this.getClass()) {
-            return value().equals(checksum.value());
+            int targetValue = checksum.content().getInt(0);
+            return value().equals(targetValue);
         }
         return false;
     }
