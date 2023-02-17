@@ -9,13 +9,4 @@ public class WeakChecksum extends AbstractChecksum {
     public Integer value() {
         return buffer.getInt(0);
     }
-
-    @Override
-    public boolean isEqualTo(AbstractChecksum checksum) {
-        if (checksum instanceof WeakChecksum) {
-            WeakChecksum weakCh = (WeakChecksum) checksum;
-            return value().equals(weakCh.value());
-        }
-        return false;
-    }
 }

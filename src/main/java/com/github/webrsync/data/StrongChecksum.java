@@ -13,13 +13,4 @@ public class StrongChecksum extends AbstractChecksum {
         buffer.getBytes(0, tmpArr, 0, 16);
         return new BigInteger(tmpArr);
     }
-
-    @Override
-    public boolean isEqualTo(AbstractChecksum cks) {
-        if (cks instanceof StrongChecksum) {
-            StrongChecksum strongCks = (StrongChecksum) cks;
-            return value().equals(strongCks.value());
-        }
-        return false;
-    }
 }
