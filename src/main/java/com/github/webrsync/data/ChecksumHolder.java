@@ -4,13 +4,15 @@ import com.github.webrsync.ChecksumUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class ChecksumHolder implements Holder<ChecksumHolder> {
+public class ChecksumHolder implements Holder {
     private final WeakChecksum weakChecksum;
     private final StrongChecksum strongChecksum;
+    private final int hash16;
 
     public ChecksumHolder(WeakChecksum weakChecksum, StrongChecksum strongChecksum) {
         this.weakChecksum = weakChecksum;
         this.strongChecksum = strongChecksum;
+        this.hash16 = ChecksumUtil.computeHash16(weakChecksum);
     }
 
     public WeakChecksum getWeakChecksum() {
@@ -22,7 +24,6 @@ public class ChecksumHolder implements Holder<ChecksumHolder> {
     }
 
     public ByteBuf content() {
-        int hash16 = ChecksumUtil.computeHash16(weakChecksum);
         ByteBuf hash = Unpooled.buffer(4, 4).writeInt(hash16);
         ByteBuf weakBuf = weakChecksum.content();
         ByteBuf strongBuf = strongChecksum.content();
@@ -30,7 +31,11 @@ public class ChecksumHolder implements Holder<ChecksumHolder> {
     }
 
     @Override
-    public boolean isEqualTo(ChecksumHolder holder) {
+    public boolean isEqualTo(Holder holder) {
+        if (holder.getClass() == ChecksumHolder.class) {
+            int targetHash = holder.content().getInt(0);
+            return this.hash16 == targetHash;
+        }
         return false;
     }
 }
