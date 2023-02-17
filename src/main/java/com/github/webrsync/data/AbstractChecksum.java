@@ -27,6 +27,11 @@ public abstract class AbstractChecksum implements Holder<AbstractChecksum> {
 
     public abstract Number value();
 
-    public abstract boolean isEqualTo(AbstractChecksum checksum);
+    public boolean isEqualTo(AbstractChecksum checksum) {
+        if (checksum.getClass() == this.getClass()) {
+            return value().equals(checksum.value());
+        }
+        return false;
+    }
 
 }
