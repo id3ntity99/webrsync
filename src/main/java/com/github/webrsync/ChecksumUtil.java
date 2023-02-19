@@ -15,6 +15,11 @@ public class ChecksumUtil {
     private ChecksumUtil() {
     }
 
+    /**
+     * Compute 32-bit weak checksum from the given byte array. <br>
+     * @param buffer A byte array containing bytes to be computed.
+     * @return {@link WeakChecksum} containing {@link ByteBuf}.
+     */
     public static WeakChecksum computeWeak(byte[] buffer) {
         int a = 0;
         int b = 0;
@@ -26,6 +31,13 @@ public class ChecksumUtil {
         return new WeakChecksum(checksum);
     }
 
+    /**
+     * Compute 32-bit weak checksum from the given {@link ByteBuf}. <br>
+     * Note that this method uses {@link ByteBuf#readBytes(byte[] dst)} and {@link ByteBuf#release()}.
+     * That means, the given buffer cannot be used anymore.
+     * @param buffer A {@link ByteBuf} containing bytes to be computed.
+     * @return {@link WeakChecksum} containing {@link ByteBuf}.
+     */
     public static WeakChecksum computeWeak(ByteBuf buffer) {
         int readable = buffer.readableBytes();
         byte[] arr = new byte[readable];
@@ -33,6 +45,12 @@ public class ChecksumUtil {
         buffer.release();
         return computeWeak(arr);
     }
+
+    /**
+     * Compute 128-bit strong checksum using MD5 hashing algorithm from given byte array. <br>
+     * @param buffer A byte array containing bytes to be computed.
+     * @return {@link StrongChecksum} containing ByteBuf.
+     */
     public static StrongChecksum computeStrong(byte[] buffer) {
         try {
             MessageDigest md = MessageDigest.getInstance(ALGORITHM);
@@ -44,14 +62,27 @@ public class ChecksumUtil {
         }
     }
 
+    /**
+     * Compute 128-bit strong checksum using MD5 hashing algorithm from the given {@link ByteBuf}. <br>
+     * Note that this method uses {@link ByteBuf#readBytes(byte[] dest)} and {@link ByteBuf#release()}.
+     * That means, the given buffer cannot be used anymore.
+     * @param buffer A {@link ByteBuf} containing bytes to be computed.
+     * @return {@link StrongChecksum} containing {@link ByteBuf}.
+     */
     public static StrongChecksum computeStrong(ByteBuf buffer) {
         int readable = buffer.readableBytes();
-        byte[] arr = new byte[readable] ;
+        byte[] arr = new byte[readable];
         buffer.readBytes(arr);
         buffer.release();
         return computeStrong(arr);
     }
 
+    /**
+     * Compute 16-bit hash using the value of the given checksum. <br>
+     * This method uses very simple calculation for the hash -- {@code checksum.value() % 2^16}.
+     * @param checksum A checksum from which the value is retrieved and, ultimately, the 16-bit hash is calculated.
+     * @return A 16-bit hash as int type.
+     */
     public static int computeHash16(AbstractChecksum checksum) {
         return checksum.value().intValue() % MOD;
     }
