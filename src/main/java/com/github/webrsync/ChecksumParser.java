@@ -5,6 +5,10 @@ import com.github.webrsync.data.StrongChecksum;
 import com.github.webrsync.data.WeakChecksum;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +28,12 @@ public class ChecksumParser extends SimpleChannelInboundHandler<File> {
                 handlerCtx.write(holder);
             }
         }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        FullHttpResponse res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, HttpResponseStatus.INTERNAL_SERVER_ERROR);
+        ctx.write(res);
     }
 
     @Override
