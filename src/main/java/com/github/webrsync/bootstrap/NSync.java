@@ -44,4 +44,8 @@ public class NSync {
         group.shutdownGracefully().syncUninterruptibly();
         isBound = false;
     }
+
+    public boolean isBound() {
+        return isBound;
+    }
 }
