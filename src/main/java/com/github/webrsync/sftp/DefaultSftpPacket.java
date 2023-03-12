@@ -7,10 +7,10 @@ public class DefaultSftpPacket extends DefaultByteBufHolder implements SftpPacke
     private final int length;
     private final SftpPacketType type;
 
-    protected DefaultSftpPacket(SftpPacketType type, ByteBuf payload) {
+    public DefaultSftpPacket(SftpPacketType type, ByteBuf payload) {
         super(payload);
         this.type = type;
-        this.length = 1 + payload.array().length; // length of the packet as byte, excluding length field itself.
+        this.length = 1 + payload.readableBytes(); // length of the packet as byte, excluding length field itself.
     }
 
     @Override
