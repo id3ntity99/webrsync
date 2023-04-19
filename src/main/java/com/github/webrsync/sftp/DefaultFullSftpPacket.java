@@ -2,6 +2,7 @@ package com.github.webrsync.sftp;
 
 import io.netty.buffer.ByteBuf;
 
+@Deprecated
 public class DefaultFullSftpPacket extends DefaultSftpPacket implements FullSftpPacket {
     private final int requestId;
 

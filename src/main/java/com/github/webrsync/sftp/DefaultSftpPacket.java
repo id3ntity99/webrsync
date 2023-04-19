@@ -2,15 +2,28 @@ package com.github.webrsync.sftp;
 
 import io.netty.buffer.ByteBuf;
 
+@Deprecated
 public class DefaultSftpPacket implements SftpPacket {
     private final int length;
     protected final SftpPacketType type;
     protected final ByteBuf content;
+    private final SftpExtensionPair[] extensions;
+    //private final EnumMap<String, String> extensionPairs;
 
     public DefaultSftpPacket(SftpPacketType type, ByteBuf content) {
-        this.content = content;
+        this(type, content, null);
+    }
+
+    public DefaultSftpPacket(SftpPacketType type, ByteBuf content, SftpExtensionPair... extensions) {
         this.type = type;
+        this.content = content;
         this.length = 1 + content.readableBytes(); // length of the packet as byte, excluding length field itself.
+        this.extensions = extensions;
+        if (extensions != null) {
+            // this.extensionPairs = new EnumMap();
+        } else {
+            // extensionPairs = null;
+        }
     }
 
     @Override
