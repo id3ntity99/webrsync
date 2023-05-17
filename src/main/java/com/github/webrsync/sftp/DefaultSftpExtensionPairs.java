@@ -19,12 +19,15 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
 
     @Override
     public SftpExtensionPairs add(CharSequence name, CharSequence data) {
-        // TODO: Prevent allowing duplicated keys.
-        int idx = doHash(name);
         /* If an entry to put extension pair is null, then the ExtensionPair.next will be the null-pointer.
          * Else, the ExtensionPair.next will be the one that pre-occupied the entry.
          * It is like inserting a new node in front of the head node in the linked list.
          */
+        if (get(name) != null) {
+            String msg = String.format("The key '%s' already exists.", name);
+            throw new UnsupportedOperationException(msg);
+        }
+        int idx = doHash(name);
         entries[idx] = new ExtensionPair(name, data, entries[idx]);
         return this;
     }
@@ -34,7 +37,7 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
         int idx = doHash(name);
         ExtensionPair current = entries[idx];
         CharSequence value = null;
-        while(current != null) {
+        while (current != null) {
             if (name.equals(current.key)) {
                 value = current.value;
             }
