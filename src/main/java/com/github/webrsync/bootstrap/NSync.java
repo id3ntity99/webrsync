@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.net.InetSocketAddress;
 import java.nio.channels.AlreadyBoundException;
 
+@Deprecated
 public class NSync {
     private final ChannelInitializer<Channel> initializer;
     private final ServerBootstrap bootstrap;

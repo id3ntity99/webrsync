@@ -9,6 +9,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Deprecated
 class TestChecksumParser {
     private final ChannelInboundHandler parser = new ChecksumParser();
     private final EmbeddedChannel channel = new EmbeddedChannel(parser);

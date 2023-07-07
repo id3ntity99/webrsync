@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Deprecated
 public class ChecksumParser extends SimpleChannelInboundHandler<File> {
     private ChannelHandlerContext handlerCtx;
 

@@ -4,6 +4,7 @@ import com.github.webrsync.ChecksumUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
+@Deprecated
 public class ChecksumHolder implements Holder {
     private final WeakChecksum weakChecksum;
     private final StrongChecksum strongChecksum;

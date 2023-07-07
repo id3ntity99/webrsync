@@ -4,10 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
+ *
  * Skeletal implementation of {@link Holder}. This abstract class contains internal {@link ByteBuf} whose reader index is 0.
  * Instantiation of the subclasses will write data into the buffer, causing the writer index to be incremented, but will not cause
  * the reader index to be incremented since the read() operation of the ByteBuf will not be used here.
  */
+@Deprecated
 public abstract class AbstractChecksum implements Holder {
     protected final ByteBuf buffer;
 

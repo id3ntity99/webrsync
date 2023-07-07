@@ -2,6 +2,7 @@ package com.github.webrsync.data;
 
 import java.math.BigInteger;
 
+@Deprecated
 public class StrongChecksum extends AbstractChecksum {
     public StrongChecksum(byte[] byteValue) {
         super(byteValue);

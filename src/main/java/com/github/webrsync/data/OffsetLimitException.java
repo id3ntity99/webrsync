@@ -1,5 +1,6 @@
 package com.github.webrsync.data;
 
+@Deprecated
 public class OffsetLimitException extends RuntimeException {
     public OffsetLimitException(int currentOffset, int offsetLimit) {
         super("Incrementing from current offset exceeds the offset limit. " +

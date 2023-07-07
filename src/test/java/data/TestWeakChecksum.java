@@ -9,6 +9,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Deprecated
 class TestWeakChecksum {
     private byte[] getRandom16Bytes() {
         byte[] randomBytes = new byte[16];

@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 
+@Deprecated
 public class ChecksumHolderProcessor extends ChannelOutboundHandlerAdapter {
     private WebSocketFrame makeFrame(Holder holder) {
         ByteBuf concatChecksum = holder.content();

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Queue;
 import java.util.Random;
 
+@Deprecated
 class TestChecksumHolderProcessor {
     private static EmbeddedChannel channel;
 

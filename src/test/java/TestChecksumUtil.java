@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Deprecated
 class TestChecksumUtil {
     private final byte[] buffer = "Hello world!".getBytes(StandardCharsets.UTF_8);
     private final int expectedWeak = 486343773;

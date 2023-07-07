@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.*;
 import java.io.File;
 import java.util.Properties;
 
+@Deprecated
 public class TargetFileProcessor extends SimpleChannelInboundHandler<FullHttpRequest> {
     private final Properties prop;
 

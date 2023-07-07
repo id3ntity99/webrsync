@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Deprecated
 public class ChecksumUtil {
     private static final int MOD = 65536;
     private static final String ALGORITHM = "md5";

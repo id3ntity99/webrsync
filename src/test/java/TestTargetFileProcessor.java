@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Deprecated
 class TestTargetFileProcessor {
     private static EmbeddedChannel channel;
 

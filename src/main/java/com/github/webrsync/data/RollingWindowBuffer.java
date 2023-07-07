@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Deprecated
 public class RollingWindowBuffer {
     private int offset = 0;
     private final byte[] buffer;
