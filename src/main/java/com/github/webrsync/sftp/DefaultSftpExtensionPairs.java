@@ -1,39 +1,64 @@
 package com.github.webrsync.sftp;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
+/**
+ *
+ * Implementation of DefaultSftpExtensionPairs.
+ */
+@Deprecated
 public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
     private static final int SIZE = 128;
     private static final byte HASH_MASK = (byte) (SIZE - 1);
     private final ExtensionPair[] entries = new ExtensionPair[SIZE];
+    private final ExtensionPair fakeHead = new ExtensionPair();
 
     public DefaultSftpExtensionPairs() {
         // Empty Constructor
+        // TODO: Adjust size of table.
     }
 
-    private int doHash(CharSequence key) {
+    protected int doHash(CharSequence key) {
         return key.hashCode() & HASH_MASK;
+    }
+
+    private void validate(CharSequence name) {
+        if (get(name) != null) { // Prevent duplicated key.
+            String msg = String.format("The key '%s' already exists.", name);
+            throw new UnsupportedOperationException(msg);
+        }
     }
 
     @Override
     public SftpExtensionPairs add(CharSequence name, CharSequence data) {
-        /* If an entry to put extension pair is null, then the ExtensionPair.next will be the null-pointer.
-         * Else, the ExtensionPair.next will be the one that pre-occupied the entry.
-         * It is like inserting a new node in front of the head node in the linked list.
-         */
-        if (get(name) != null) {
-            String msg = String.format("The key '%s' already exists.", name);
-            throw new UnsupportedOperationException(msg);
-        }
+        Objects.requireNonNull(name);
+        validate(name);
         int idx = doHash(name);
-        entries[idx] = new ExtensionPair(name, data, entries[idx]);
+        ExtensionPair newExtension = new ExtensionPair(name, data, entries[idx]);
+        ExtensionPair tmp = fakeHead.nextEntry();
+        newExtension.setNextEntry(tmp);
+        fakeHead.setNextEntry(newExtension);
+        entries[idx] = newExtension;
+        return this;
+    }
+
+    @Override
+    public SftpExtensionPairs remove(CharSequence name) {
+        Objects.requireNonNull(name);
+        int idx = doHash(name);
+        ExtensionPair target = entries[idx];
+        while (target != null) {
+            if (name.equals(target.key)) {
+                entries[idx] = null;
+            }
+            target = target.nextNode();
+        }
         return this;
     }
 
     @Override
     public CharSequence get(CharSequence name) {
+        Objects.requireNonNull(name);
         int idx = doHash(name);
         ExtensionPair current = entries[idx];
         CharSequence value = null;
@@ -41,25 +66,48 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
             if (name.equals(current.key)) {
                 value = current.value;
             }
-            current = current.next;
+            current = current.nextNode;
         }
         return value;
     }
 
     @Override
     public boolean contains(CharSequence name) {
+        Objects.requireNonNull(name);
         return get(name) != null;
     }
 
     @Override
     public boolean contains(CharSequence name, CharSequence data) {
+        Objects.requireNonNull(name);
         CharSequence value = get(name);
         if (value != null)
             return value.equals(data);
         return false;
     }
 
-    private static class NodeIterator implements Iterator<Map.Entry<CharSequence, CharSequence>> {
+    @Override
+    public List<Map.Entry<CharSequence, CharSequence>> getAll() {
+        List<Map.Entry<CharSequence, CharSequence>> extensionList = new ArrayList<>();
+        for (ExtensionPair entry : entries) {
+            if (entry == null)
+                continue;
+            extensionList.add(entry);
+            if (entry.nextNode() != null) {
+                Iterator<ExtensionPair> iterator = new NodeIterator(entry);
+                while (iterator.hasNext())
+                    extensionList.add(iterator.next());
+            }
+        }
+        return extensionList;
+    }
+
+    @Override
+    public int length() {
+        return 0;
+    }
+
+    private static class NodeIterator implements Iterator<ExtensionPair> {
         private ExtensionPair currentNode;
 
         public NodeIterator(ExtensionPair headNode) {
@@ -68,14 +116,14 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
 
         @Override
         public boolean hasNext() {
-            return currentNode.next != null;
+            return currentNode.nextNode != null;
         }
 
         @Override
-        public Map.Entry<CharSequence, CharSequence> next() {
+        public ExtensionPair next() {
             if (!hasNext())
                 throw new NoSuchElementException();
-            currentNode = currentNode.next;
+            currentNode = currentNode.nextNode;
             return currentNode;
         }
 
@@ -89,12 +137,17 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
     private static class ExtensionPair implements Map.Entry<CharSequence, CharSequence> {
         private final CharSequence key;
         private CharSequence value;
-        private ExtensionPair next;
+        private ExtensionPair nextNode = null;
+        private ExtensionPair nextEntry = null;
 
-        public ExtensionPair(CharSequence key, CharSequence value, ExtensionPair next) {
+        public ExtensionPair(CharSequence key, CharSequence value, ExtensionPair nextNode) {
             this.key = key;
             this.value = value;
-            this.next = next;
+            this.nextNode = nextNode;
+        }
+
+        public ExtensionPair() {
+            key = null;
         }
 
         @Override
@@ -112,6 +165,18 @@ public class DefaultSftpExtensionPairs implements SftpExtensionPairs {
             CharSequence oldVal = value;
             value = newValue;
             return oldVal;
+        }
+
+        public void setNextEntry(ExtensionPair nextEntry) {
+            this.nextEntry = nextEntry;
+        }
+
+        public ExtensionPair nextNode() {
+            return nextNode;
+        }
+
+        public ExtensionPair nextEntry() {
+            return nextEntry;
         }
 
         @Override
