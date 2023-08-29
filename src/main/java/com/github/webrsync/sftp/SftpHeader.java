@@ -1,9 +1,24 @@
 package com.github.webrsync.sftp;
 
-public interface SftpHeader {
-    int length();
+@Deprecated(forRemoval = true)
+public class SftpHeader {
+    protected int length = 0;
+    protected final SftpPacketType type;
 
-    void incrementBy(int i);
+    protected SftpHeader(SftpPacketType type) {
+        this.type = type;
+        incrementBy(SftpPacketType.BYTES);
+    }
 
-    SftpPacketType type();
+    public int length() {
+        return length;
+    }
+
+    protected void incrementBy(int i) {
+        length += i;
+    }
+
+    public SftpPacketType type() {
+        return type;
+    }
 }

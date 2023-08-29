@@ -1,5 +1,6 @@
 package com.github.webrsync.sftp;
 
-public interface FullSftpPacket extends SftpPacket {
+@Deprecated
+public interface FullSftpPacket {
     int requestId();
 }

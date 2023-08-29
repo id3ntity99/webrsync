@@ -1,5 +1,9 @@
 package com.github.webrsync.sftp;
 
-public interface InitHeader extends SftpHeader {
+@Deprecated
+public abstract class InitHeader extends SftpHeader {
     //Marker interface
+    protected InitHeader(SftpPacketType type) {
+       super(type);
+    }
 }
