@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.26)
+project(webrsync_sftp_acl C)
+
+find_package(JNI REQUIRED)
+include_directories(${JNI_INCLUDE_DIRS})
+
+
+set(CMAKE_C_STANDARD 11)
+
+add_library(webrsync_sftp_acl SHARED library.c
+        sftp_acl.h
+        decode_acl.c
+        encode_acl.c
+        get_acl_size.c
+        get_sftp_acl.c
+        set_sftp_acl.c
+        com_github_webrsync_sftp_fs_AclManager.c
+        com_github_webrsync_sftp_fs_AclManager.h)
