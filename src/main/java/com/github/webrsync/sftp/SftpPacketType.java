@@ -30,6 +30,7 @@ public class SftpPacketType {
     public static final SftpPacketType SSH_FXP_ATTRS = new SftpPacketType((byte) 105);
     public static final SftpPacketType SSH_FXP_EXTENDED = new SftpPacketType((byte) 200);
     public static final SftpPacketType SSH_FXP_EXTENDED_REPLY = new SftpPacketType((byte) 201);
+    public static final int BYTES = 1;
 
     private final byte value;
 
@@ -41,8 +42,17 @@ public class SftpPacketType {
         return value;
     }
 
-    public String name() {
-        //TODO: Impl This
-        return null;
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SftpPacketType)) {
+            return false;
+        }
+        SftpPacketType targetType = (SftpPacketType) obj;
+        return targetType.value() == this.value();
     }
 }
