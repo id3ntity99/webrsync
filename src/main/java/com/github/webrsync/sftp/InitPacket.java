@@ -1,13 +1,8 @@
 package com.github.webrsync.sftp;
 
-public abstract class InitPacket extends SftpPacket<String, String> {
-    @Override
-    public InitHeader header() {
-       return (InitHeader) header;
-    }
+import io.netty.buffer.ByteBufHolder;
 
-    @Override
-    public AttributeTable<String , String> attributes() {
-        return attributes;
-    }
+public interface InitPacket extends ByteBufHolder {
+    ExtensionTable extensions();
+    int version();
 }
