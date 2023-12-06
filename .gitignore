@@ -4,3 +4,4 @@
 build/*
 !build/build.xml
 out/*
+.gradle/*
