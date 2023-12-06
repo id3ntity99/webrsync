@@ -1,11 +1,18 @@
 package com.github.webrsync.sftp.fs;
 
+import com.github.webrsync.sftp.internal.LibLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AclManager {
-    private static final String LIB_PATH = System.getProperty("user.dir") + "/src/main/native/webrsync_sftp_acl/"
-            + "libacl.so";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AclManager.class);
 
     static {
-        System.load(LIB_PATH);
+        try {
+            LibLoader.load("acl");
+        } catch (NoSuchFieldException e) {
+            LOGGER.debug(e.getMessage(), e);
+        }
     }
 
     private AclManager() {
