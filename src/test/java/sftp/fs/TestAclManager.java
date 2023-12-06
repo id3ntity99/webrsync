@@ -1,14 +1,15 @@
 package sftp.fs;
 
 import com.github.webrsync.sftp.fs.*;
+import com.github.webrsync.sftp.internal.LibLoader;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAclManager {
-    private static final String PATH = "/home/lee/a.txt";
-    private static final String WHO = "hell-from-java";
+    private static final String PATH = "~/a.txt";
+    private static final String WHO = "hello-from-java";
 
     @Order(1)
     @Test
