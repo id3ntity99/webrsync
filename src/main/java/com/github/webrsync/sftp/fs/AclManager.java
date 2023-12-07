@@ -19,7 +19,7 @@ public class AclManager {
         //Helper class does not have constructor
     }
 
-    public static native int setSftpAcl(String path, AccessControlList acl);
+    public static native int setSftpAcl(String path, AccessControlList acl, SetXattrFlag flag);
 
     public static native AccessControlList getSftpAcl(String path);
 
