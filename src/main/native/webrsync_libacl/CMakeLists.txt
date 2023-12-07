@@ -7,7 +7,7 @@ include_directories(${JNI_INCLUDE_DIRS})
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(webrsync_sftp_acl SHARED library.c
+add_library(webrsync_sftp_acl SHARED
         sftp_acl.h
         decode_acl.c
         encode_acl.c
