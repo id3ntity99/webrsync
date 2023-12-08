@@ -16,4 +16,7 @@ add_library(webrsync_sftp_acl SHARED
         set_sftp_acl.c
         com_github_webrsync_sftp_fs_AclManager.c
         com_github_webrsync_sftp_fs_AclManager.h
-        does_acl_exist.c)
+        does_acl_exist.c
+        throw_exception.c
+        throw_exception.c
+)
