@@ -140,12 +140,22 @@ JNIEXPORT jobject JNICALL Java_com_github_webrsync_sftp_fs_AclManager_getSftpAcl
     return aclObj;
 
     free_failed:
-    free(in);
+    //free(in);
     (*env)->ReleaseStringUTFChars(env, string, path);
     return NULL;
 }
 
 JNIEXPORT jboolean JNICALL Java_com_github_webrsync_sftp_fs_AclManager_doesExist
         (JNIEnv *env, jclass class, jstring string) {
-    //TODO: 2. Create a new C function that checks whether a file contains SFTP ACL or not.
+    if (string == NULL) {
+        char *msg = "The path should not be NULL";
+        throw_exception(__func__, __LINE__, __FILE__, msg);
+    }
+    const char *path = (*env)->GetStringUTFChars(env, string, 0);
+    size_t read_bytes = get_xattr_size(path);
+    (*env)->ReleaseStringUTFChars(env, string, path);
+    if (read_bytes != 0)
+        return (jboolean) 1;
+    else
+        return (jboolean) 0;
 }
