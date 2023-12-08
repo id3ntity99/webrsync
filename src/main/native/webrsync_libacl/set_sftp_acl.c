@@ -17,8 +17,8 @@ extern int set_sftp_acl(const char *path, struct sftp_acl *acl, int xattr_flag) 
     }
     int result = setxattr(path, SFX_ACL_XATTR_NAME, buf, acl_size, xattr_flag);
     if (result == -1) {
-        printf("[NATIVE]Exception raised from %s:\n "
-               "%s(Status code = %d)\n", __func__,strerror(errno), errno);
+        char *msg = "Something went wrong";
+        throw_exception_errno(__func__, __LINE__, __FILE__, errno, msg);
         goto failed_free;
     }
     return result;
