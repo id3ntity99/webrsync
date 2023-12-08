@@ -102,7 +102,8 @@ jobject new_acl_object(JNIEnv *env, struct sftp_acl *acl_ptr) {
 }
 
 JNIEXPORT jint JNICALL Java_com_github_webrsync_sftp_fs_AclManager_setSftpAcl
-        (JNIEnv *env, jclass class, jstring string, jobject j_acl) {
+        (JNIEnv *env, jclass class, jstring string, jobject j_acl, jobject j_xattr_flag) {
+    int xattrValue = (int) get_jint_field(env, j_xattr_flag, "value");
     jobject aclFlagsObj = get_object_field(env, j_acl, "aclFlags", ACL_FLAGS_FIELD_TYPE);
     jint aclFlags = get_jint_field(env, aclFlagsObj, "value");
     jint aceCnt = get_jint_field(env, j_acl, "aceCount");
@@ -115,7 +116,7 @@ JNIEXPORT jint JNICALL Java_com_github_webrsync_sftp_fs_AclManager_setSftpAcl
             .ace_arr_ptr = aces
     };
     const char *path = (*env)->GetStringUTFChars(env, string, 0);
-    int res = set_sftp_acl(path, &acl, XATTR_REPLACE);
+    int res = set_sftp_acl(path, &acl, xattrValue);
     (*env)->ReleaseStringUTFChars(env, string, path);
     return (jint) res;
 }
@@ -146,5 +147,5 @@ JNIEXPORT jobject JNICALL Java_com_github_webrsync_sftp_fs_AclManager_getSftpAcl
 
 JNIEXPORT jboolean JNICALL Java_com_github_webrsync_sftp_fs_AclManager_doesExist
         (JNIEnv *env, jclass class, jstring string) {
-    //TODO: 3. Create a new C function that checks whether a file contains SFTP ACL or not.
+    //TODO: 2. Create a new C function that checks whether a file contains SFTP ACL or not.
 }

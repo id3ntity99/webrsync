@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     com_github_webrsync_sftp_fs_AclManager
  * Method:    setSftpAcl
- * Signature: (Ljava/lang/String;Lcom/github/webrsync/sftp/fs/AccessControlList;)I
+ * Signature: (Ljava/lang/String;Lcom/github/webrsync/sftp/fs/AccessControlList;Lcom/github/webrsync/sftp/fs/SetXattrFlag;)I
  */
 JNIEXPORT jint JNICALL Java_com_github_webrsync_sftp_fs_AclManager_setSftpAcl
-  (JNIEnv *, jclass, jstring, jobject);
+  (JNIEnv *, jclass, jstring, jobject, jobject);
 
 /*
  * Class:     com_github_webrsync_sftp_fs_AclManager
