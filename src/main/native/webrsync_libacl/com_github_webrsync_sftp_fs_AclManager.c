@@ -102,13 +102,8 @@ jobject new_acl_object(JNIEnv *env, struct sftp_acl *acl_ptr) {
 }
 
 JNIEXPORT jint JNICALL Java_com_github_webrsync_sftp_fs_AclManager_setSftpAcl
-<<<<<<< HEAD
         (JNIEnv *env, jclass class, jstring string, jobject j_acl, jobject j_xattr_flag) {
     int xattrValue = (int) get_jint_field(env, j_xattr_flag, "value");
-=======
-        (JNIEnv *env, jclass class, jstring string, jobject j_acl, jobject j_xattr_flag) { //TODO 1. Use j_xattr_flag for setxattr(...)
-    jint xattrValue = get_jint_field(env, j_xattr_flag, "value");
->>>>>>> refs/remotes/origin/main
     jobject aclFlagsObj = get_object_field(env, j_acl, "aclFlags", ACL_FLAGS_FIELD_TYPE);
     jint aclFlags = get_jint_field(env, aclFlagsObj, "value");
     jint aceCnt = get_jint_field(env, j_acl, "aceCount");
