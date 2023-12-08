@@ -119,3 +119,9 @@ extern int get_sftp_acl(const char *path, unsigned char *buf);
 extern size_t get_xattr_size(const char *path);
 
 extern int decode_acl(unsigned char *buf, struct sftp_acl *acl_ptr);
+
+extern ssize_t does_acl_exist(const char *path);
+
+extern void throw_exception(const char *func_name, int lineno, char *file_name, char *msg);
+
+extern void throw_exception_errno(const char *func_name, int lineno, char *file_name, int err_num, char *msg);
