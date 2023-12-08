@@ -15,5 +15,5 @@ extern void throw_exception(const char *func_name, int lineno, char *file_name, 
 
 extern void throw_exception_errno(const char *func_name, int lineno, char *file_name, int err_num, char *msg) {
     throw_exception(func_name, lineno, file_name, msg);
-    printf(RED "[NATIVE] %s\n" RESET, strerror(err_num));
+    printf(RED "[NATIVE] %s(status code = %d)\n" RESET, strerror(err_num), err_num);
 }
