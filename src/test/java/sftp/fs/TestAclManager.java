@@ -4,11 +4,6 @@ import com.github.webrsync.sftp.fs.*;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAclManager {
