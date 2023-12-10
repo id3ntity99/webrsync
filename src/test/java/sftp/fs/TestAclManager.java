@@ -1,7 +1,6 @@
 package sftp.fs;
 
 import com.github.webrsync.sftp.fs.*;
-import com.github.webrsync.sftp.internal.LibLoader;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
