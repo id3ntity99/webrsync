@@ -1,15 +1,24 @@
 package com.github.webrsync.sftp.attrib;
 
+import com.github.webrsync.sftp.internal.LibLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.file.NoSuchFileException;
+
 public class NativeStat {
-    private static final String LIB_PATH = System.getProperty("user.dir") +
-            "/src/main/native/" + "com_github_webrsync_sftp_SftpFileAttributes.so";
+    private static final Logger LOGGER = LoggerFactory.getLogger(NativeStat.class);
 
     static {
-        System.load(LIB_PATH);
+        try {
+            LibLoader.load("stat");
+        } catch (NoSuchFileException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     private NativeStat() {
-        //This helper class doesn't have constructor.
+        //Utility class doesn't have constructor.
     }
 
     private static native int[] stat(String uri);
