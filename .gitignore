@@ -5,3 +5,5 @@ build/*
 !build/build.xml
 out/*
 .gradle/*
+src/test/*.txt
+src/main/resources/*
