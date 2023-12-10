@@ -1,4 +1,4 @@
-package sftp;
+package sftp.attrib;
 
 import com.github.webrsync.sftp.attrib.SftpFileAttributes;
 import org.junit.jupiter.api.Test;
