@@ -5,10 +5,15 @@ import com.github.webrsync.sftp.internal.LibLoader;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAclManager {
-    private static final String PATH = "~/a.txt";
+    private static final String PATH = "/home/tommy/a.txt";
     private static final String WHO = "hello-from-java";
 
     @Order(1)
@@ -22,7 +27,11 @@ class TestAclManager {
         int aceCount = 1;
         AccessControlEntry[] aceArr = {ace};
         AccessControlList acl = new AccessControlList(AclFlags.SFX_ACL_CONTROL_INCLUDED, aceCount, aceArr);
-        int res = AclManager.setSftpAcl(PATH, acl);
+        int res = -1;
+        if (AclManager.doesExist(PATH))
+            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_REPLACE);
+        else
+            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_CREATE);
         assertEquals(0, res);
     }
 
@@ -57,7 +66,12 @@ class TestAclManager {
         int cnt = 2;
         AccessControlEntry[] aces = {ace1, ace2};
         AccessControlList acl = new AccessControlList(AclFlags.SFX_ACL_CONTROL_INCLUDED, cnt, aces);
-        int res = AclManager.setSftpAcl(PATH, acl);
+        int res = -1;
+        if (AclManager.doesExist(PATH)) {
+            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_REPLACE);
+        } else {
+            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_CREATE);
+        }
         assertEquals(0, res);
     }
 
