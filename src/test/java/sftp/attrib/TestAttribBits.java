@@ -1,2 +1,4 @@
-package sftp.attrib;public class TestAttribBits {
+package sftp.attrib;
+
+public class TestAttribBits {
 }
