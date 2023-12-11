@@ -1,14 +1,33 @@
 package sftp.fs;
 
 import com.github.webrsync.sftp.fs.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAclManager {
-    private static final String PATH = "/home/tommy/a.txt";
+    private static String path;
     private static final String WHO = "hello-from-java";
+
+    @BeforeAll
+    public static void setup() {
+        String propsPath = System.getProperty("user.dir") + "/src/main/resources/app.properties";
+        try (InputStream in = new FileInputStream(propsPath)) {
+            Properties props = new Properties();
+            props.load(in);
+            path = props.getProperty("dummy.path");
+            System.out.println(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Order(1)
     @Test
@@ -21,18 +40,18 @@ class TestAclManager {
         int aceCount = 1;
         AccessControlEntry[] aceArr = {ace};
         AccessControlList acl = new AccessControlList(AclFlags.SFX_ACL_CONTROL_INCLUDED, aceCount, aceArr);
-        int res = -1;
-        if (AclManager.doesExist(PATH))
-            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_REPLACE);
+        int res;
+        if (AclManager.doesExist(path))
+            res = AclManager.setSftpAcl(path, acl, SetXattrFlag.XATTR_REPLACE);
         else
-            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_CREATE);
+            res = AclManager.setSftpAcl(path, acl, SetXattrFlag.XATTR_CREATE);
         assertEquals(0, res);
     }
 
     @Order(2)
     @Test
     void testGetSftpAcl() {
-        AccessControlList acl = AclManager.getSftpAcl(PATH);
+        AccessControlList acl = AclManager.getSftpAcl(path);
         assertEquals(AclFlags.SFX_ACL_CONTROL_INCLUDED.value(), acl.aclFlags().value());
         assertEquals(1, acl.aceCount());
         AccessControlEntry ace = acl.aces()[0];
@@ -61,10 +80,10 @@ class TestAclManager {
         AccessControlEntry[] aces = {ace1, ace2};
         AccessControlList acl = new AccessControlList(AclFlags.SFX_ACL_CONTROL_INCLUDED, cnt, aces);
         int res = -1;
-        if (AclManager.doesExist(PATH)) {
-            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_REPLACE);
+        if (AclManager.doesExist(path)) {
+            res = AclManager.setSftpAcl(path, acl, SetXattrFlag.XATTR_REPLACE);
         } else {
-            res = AclManager.setSftpAcl(PATH, acl, SetXattrFlag.XATTR_CREATE);
+            res = AclManager.setSftpAcl(path, acl, SetXattrFlag.XATTR_CREATE);
         }
         assertEquals(0, res);
     }
@@ -72,7 +91,7 @@ class TestAclManager {
     @Order(4)
     @Test
     void testGettingAclWithMultipleAces() {
-        AccessControlList acl = AclManager.getSftpAcl(PATH);
+        AccessControlList acl = AclManager.getSftpAcl(path);
         assertEquals(2, acl.aceCount());
         AccessControlEntry ace1 = acl.aces()[0];
         AceType type1 = ace1.type();
