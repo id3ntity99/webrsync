@@ -12,6 +12,10 @@ import java.util.Properties;
 public class LibLoader {
     private static final Logger logger = LoggerFactory.getLogger(LibLoader.class);
 
+    private LibLoader() {
+        //Utility class has no constructor.
+    }
+
     public static void load(String libName) throws NoSuchFileException {
         Properties props = new Properties();
         String path = System.getProperty("user.dir") + "/src/main/resources/app.properties";
@@ -21,7 +25,7 @@ public class LibLoader {
                 String libPath = props.getProperty("libacl.dev");
                 System.load(libPath);
             } else if (libName.toLowerCase().contains("stat")) {
-                String libPath = props.getProperty("libastat.dev");
+                String libPath = props.getProperty("libstat.dev");
                 System.load(libPath);
             } else {
                 throw new NoSuchFileException("There is no such field in app.properties: " + libName);
