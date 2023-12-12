@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.NoSuchFileException;
 
-public class NativeStat {
+public final class NativeStat {
     private static final Logger LOGGER = LoggerFactory.getLogger(NativeStat.class);
 
     static {
@@ -21,9 +21,9 @@ public class NativeStat {
         //Utility class doesn't have constructor.
     }
 
-    private static native int[] stat(String uri);
+    public static native int[] stat(String uri);
 
-    private static native byte[] getLocalDomainName();
+    public static native byte[] getLocalDomainName();
 
-    private static native byte[] getOwnerName(int uid);
+    public static native byte[] getOwnerName(int uid);
 }
