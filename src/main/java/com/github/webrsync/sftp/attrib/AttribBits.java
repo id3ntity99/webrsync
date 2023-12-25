@@ -13,11 +13,9 @@ public final class AttribBits {
     public static final AttribBits IMMUTABLE = new AttribBits(0x00000200);
     public static final AttribBits SYNC = new AttribBits(0x00000400);
     public static final AttribBits TRANSLATION_ERR = new AttribBits(0x00000800);
-    private static final int mask = 0x00000000;
     private final int value;
 
-    //TODO: attrib-bits-valid should be the property of this class.
-    private AttribBits(int value) {
+    AttribBits(int value) {
         this.value = value;
     }
 
