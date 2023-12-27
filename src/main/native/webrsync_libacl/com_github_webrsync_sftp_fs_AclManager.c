@@ -42,9 +42,9 @@ void iterate_aces
         jobject flagObj = get_object_field(env, aceObj, "flag", ACE_FLAG_FIELD_TYPE);
         jobject maskObj = get_object_field(env, aceObj, "mask", ACE_MASK_FIELD_TYPE);
         jstring whoStrObj = get_object_field(env, aceObj, "who", "Ljava/lang/String;");
-        ace_type4 type = (u_int32_t) get_jint_field(env, typeObj, "value");
-        ace_flag4 flag = (u_int32_t) get_jint_field(env, flagObj, "value");
-        ace_mask4 mask = (u_int32_t) get_jint_field(env, maskObj, "value");
+        ace_type type = (u_int32_t) get_jint_field(env, typeObj, "value");
+        ace_flag flag = (u_int32_t) get_jint_field(env, flagObj, "value");
+        ace_mask mask = (u_int32_t) get_jint_field(env, maskObj, "value");
         unsigned char *who = (unsigned char *) (*env)->GetStringUTFChars(env, whoStrObj, 0);
         struct sftp_ace ace = {
                 .type = type,
@@ -61,7 +61,7 @@ void iterate_aces
     }
 }
 
-jobjectArray create_obj_arr(JNIEnv *env, acl_ace_cnt cnt, struct sftp_acl *acl_ptr) {
+jobjectArray create_obj_arr(JNIEnv *env, ace_cnt cnt, struct sftp_acl *acl_ptr) {
     jclass aceClass = get_global_ref(env, ACE_CLASS_PATH);
     jclass aceTypeClass = get_global_ref(env, ACE_TYPE_CLASS_PATH);
     jclass aceFlagClass = get_global_ref(env, ACE_FLAG_CLASS_PATH);
@@ -93,9 +93,9 @@ jobject new_acl_object(JNIEnv *env, struct sftp_acl *acl_ptr) {
     jclass aclClass = get_global_ref(env, ACL_CLASS_PATH);
     jmethodID aclFlagsCtor = get_constructor(env, aclFlagsClass, ACL_FLAGS_PARAMS);
     jmethodID aclCtor = get_constructor(env, aclClass, ACL_PARAMS);
-    jobject aclFlags = (*env)->NewObject(env, aclFlagsClass, aclFlagsCtor, acl_ptr->flags);
-    jobjectArray aceObjArr = create_obj_arr(env, acl_ptr->ace_cnt, acl_ptr);
-    jobject acl = (*env)->NewObject(env, aclClass, aclCtor, aclFlags, (jint) acl_ptr->ace_cnt, aceObjArr);
+    jobject aclFlags = (*env)->NewObject(env, aclFlagsClass, aclFlagsCtor, acl_ptr->flag);
+    jobjectArray aceObjArr = create_obj_arr(env, acl_ptr->cnt, acl_ptr);
+    jobject acl = (*env)->NewObject(env, aclClass, aclCtor, aclFlags, (jint) acl_ptr->cnt, aceObjArr);
     (*env)->DeleteGlobalRef(env, aclFlagsClass);
     (*env)->DeleteGlobalRef(env, aclClass);
     return acl;
@@ -111,8 +111,8 @@ JNIEXPORT jint JNICALL Java_com_github_webrsync_sftp_fs_AclManager_setSftpAcl
     struct sftp_ace aces[aceCnt];
     iterate_aces(env, aceCnt, aceObjArr, aces);
     struct sftp_acl acl = {
-            .flags = aclFlags,
-            .ace_cnt = aceCnt,
+            .flag = aclFlags,
+            .cnt = aceCnt,
             .ace_arr_ptr = aces
     };
     const char *path = (*env)->GetStringUTFChars(env, string, 0);

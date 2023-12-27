@@ -4,31 +4,32 @@
 
 #include <sys/types.h>
 #include <sys/xattr.h>
+#include <stdbool.h>
 
 #ifndef JNI_NFCACL_WEBRSYNC_ACL_H
 #define JNI_NFCACL_WEBRSYNC_ACL_H
 
 #endif //JNI_NFCACL_WEBRSYNC_ACL_H
 
-typedef u_int32_t acl_flags;
-typedef u_int32_t acl_ace_cnt;
-typedef u_int32_t ace_type4;
-typedef u_int32_t ace_flag4;
-typedef u_int32_t ace_mask4;
+typedef u_int32_t acl_flag;
+typedef u_int32_t ace_cnt;
+typedef u_int32_t ace_type;
+typedef u_int32_t ace_flag;
+typedef u_int32_t ace_mask;
 
 /**
  * See SFTP Specification, section 7.8 "ACL".
  */
 struct sftp_ace {
-    ace_type4 type;
-    ace_flag4 flag;
-    ace_mask4 mask;
+    ace_type type;
+    ace_flag flag;
+    ace_mask mask;
     const unsigned char *who_ptr;
 };
 
 struct sftp_acl {
-    acl_flags flags;
-    acl_ace_cnt ace_cnt;
+    acl_flag flag;
+    ace_cnt cnt;
     struct sftp_ace *ace_arr_ptr;
 };
 
@@ -39,7 +40,7 @@ struct sftp_acl {
 #define ACE4_SYSTEM_AUDIT_ACE_TYPE      0x00000002
 #define ACE4_SYSTEM_ALARM_ACE_TYPE      0x00000003
 
-//ACE flags:
+//ACE flag:
 #define ACE4_FILE_INHERIT_ACE           0x00000001
 #define ACE4_DIRECTORY_INHERIT_ACE      0x00000002
 #define ACE4_NO_PROPAGATE_INHERIT_ACE   0x00000004
@@ -67,7 +68,7 @@ struct sftp_acl {
 #define ACE4_WRITE_OWNER                0x00080000
 #define ACE4_SYNCHRONIZE                0x00100000
 
-//ACL flags
+//ACL flag
 #define SFX_ACL_CONTROL_INCLUDED        0x00000001
 #define SFX_ACL_CONTROL_PRESENT         0x00000002
 #define SFX_ACL_CONTROL_INHERITED       0x00000004
@@ -125,3 +126,9 @@ extern ssize_t does_acl_exist(const char *path);
 extern void throw_exception(const char *func_name, int lineno, char *file_name, char *msg);
 
 extern void throw_exception_errno(const char *func_name, int lineno, char *file_name, int err_num, char *msg);
+
+extern bool is_dir(const char *path);
+
+extern struct sftp_ace *create_new_ace(int type, int flag, int mask, const unsigned char *who);
+
+extern struct sftp_acl *create_new_acl(acl_flag flag, ace_cnt ace_cnt, struct sftp_ace *ace_arr_ptr);

@@ -39,11 +39,11 @@ void read_string(unsigned char **pos, unsigned char *out, size_t len) {
     }
 }
 
-void decode_aces(struct sftp_ace *aces, acl_ace_cnt cnt, unsigned char **pos) {
+void decode_aces(struct sftp_ace *aces, ace_cnt cnt, unsigned char **pos) {
     for (int i = 0; i < cnt; i++) {
-        ace_type4 type = read_uint32(pos);
-        ace_flag4 flag = read_uint32(pos);
-        ace_mask4 mask = read_uint32(pos);
+        ace_type type = read_uint32(pos);
+        ace_flag flag = read_uint32(pos);
+        ace_mask mask = read_uint32(pos);
         size_t who_len = get_str_len(pos);
         unsigned char *who = malloc(sizeof(char) * who_len);
         read_string(pos, who, who_len);
@@ -63,12 +63,12 @@ extern int decode_acl(unsigned char *buf, struct sftp_acl *acl_ptr) {
         return -1;
     }
     unsigned char *pos = buf;
-    acl_flags flags = read_uint32(&pos);
-    acl_ace_cnt cnt = read_uint32(&pos);
+    acl_flag flags = read_uint32(&pos);
+    ace_cnt cnt = read_uint32(&pos);
     struct sftp_ace *ace_arr = malloc(sizeof(struct sftp_ace) * cnt);
     decode_aces(ace_arr, cnt, &pos);
-    acl_ptr->flags = flags;
-    acl_ptr->ace_cnt = cnt;
+    acl_ptr->flag = flags;
+    acl_ptr->cnt = cnt;
     acl_ptr->ace_arr_ptr = ace_arr;
     return 0;
 }

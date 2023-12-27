@@ -32,7 +32,7 @@ void write_char_le(const unsigned char *s, unsigned char **pos, size_t *size_ptr
     }
 }
 
-void encode_acl_ace_arr(struct sftp_ace *ace_arr_ptr, acl_ace_cnt cnt, unsigned char **pos, size_t *size_ptr) {
+void encode_acl_ace_arr(struct sftp_ace *ace_arr_ptr, ace_cnt cnt, unsigned char **pos, size_t *size_ptr) {
     for (int i = 0; i < cnt; i++) {
         struct sftp_ace *current = ((struct sftp_ace *) &(ace_arr_ptr[i]));
         write_uint32_le(current->type, pos, size_ptr);
@@ -58,9 +58,9 @@ extern int encode_acl(struct sftp_acl *acl, unsigned char *buf, size_t buf_len) 
     }
     size_t encoded_size = 0;
     unsigned char *curr_pos = buf;
-    write_uint32_le(acl->flags, &curr_pos, &encoded_size);
-    write_uint32_le(acl->ace_cnt, &curr_pos, &encoded_size);
-    encode_acl_ace_arr(acl->ace_arr_ptr, acl->ace_cnt, &curr_pos, &encoded_size);
+    write_uint32_le(acl->flag, &curr_pos, &encoded_size);
+    write_uint32_le(acl->cnt, &curr_pos, &encoded_size);
+    encode_acl_ace_arr(acl->ace_arr_ptr, acl->cnt, &curr_pos, &encoded_size);
     if (buf_len != encoded_size)
         goto failed;
     return (int) encoded_size;
