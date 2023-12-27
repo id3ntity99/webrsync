@@ -132,3 +132,5 @@ extern bool is_dir(const char *path);
 extern struct sftp_ace *create_new_ace(int type, int flag, int mask, const unsigned char *who);
 
 extern struct sftp_acl *create_new_acl(acl_flag flag, ace_cnt ace_cnt, struct sftp_ace *ace_arr_ptr);
+
+extern int set_ace(const char *path, struct sftp_ace *ace);
