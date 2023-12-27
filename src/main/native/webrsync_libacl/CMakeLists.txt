@@ -19,4 +19,13 @@ add_library(webrsync_sftp_acl SHARED
         does_acl_exist.c
         throw_exception.c
         throw_exception.c
+        is_directory.c
+        is_directory.c
+        do_file_inherit.c
+        set_ace.c
+        set_ace.c
+        create_new_ace.c
+        create_new_ace.c
+        create_new_acl.c
+        create_new_acl.c
 )
