@@ -22,13 +22,21 @@ extern int set_ace(const char *path, struct sftp_ace *ace) {
     //Get existing ACL from the path.
     struct sftp_acl *acl_ptr = malloc(sizeof(struct sftp_acl)); //Alloc mem for ACL
     size_t size = get_xattr_size(path); //Get the size of the ACL of specified path
-    unsigned char *buf = malloc(sizeof(char) * size); //Alloc mem for tmp buf.
+    unsigned char *buf = malloc(sizeof(unsigned char) * size); //Alloc mem for tmp buf.
     int res = get_sftp_acl(path, buf);
-    if (res != 0)
+    if (res != 0) {
+        char *msg = "res from \"get_sftp_acl\" is non-zero";
+        throw_exception(__FUNCTION__, __LINE__, __FILE__, msg);
         goto exception;
+    }
     int decode_res = decode_acl(buf, acl_ptr);
-    if (decode_res != 0)
+    if (decode_res != 0) {
+        throw_exception(__FUNCTION__,
+                        __LINE__,
+                        __FILE__,
+                        "Response from \"decode_acl\" is non-zero");
         goto exception;
+    }
 
     //Add a new ACE to the ACL that was just decoded.
     struct sftp_ace *old_ace_arr = acl_ptr->ace_arr_ptr;
@@ -50,6 +58,5 @@ extern int set_ace(const char *path, struct sftp_ace *ace) {
     exception:
     free(buf);
     free(acl_ptr);
-    throw_exception(__FUNCTION__, __LINE__, __FILE__, "Something went wrong");
     return -1;
 }
